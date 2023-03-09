@@ -75,9 +75,11 @@ class DonationsController < ApplicationController
 
   def update
     @donation = Donation.find(params[:id])
-    if @donation.replace_increase!(donation_params)
+    begin
+      @donation.replace_increase!(donation_params)
       redirect_to donations_path
-    else
+    rescue Errors::InsufficientAllotment => error
+      flash[:error] = error.message
       render "edit"
     end
   end
