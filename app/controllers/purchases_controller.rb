@@ -70,17 +70,23 @@ class PurchasesController < ApplicationController
       load_form_collections
       render "edit"
     end
+  rescue Errors::InsufficientAllotment => error
+    flash[:error] = error.message
+    render "edit"
   end
 
   def destroy
     ActiveRecord::Base.transaction do
-      purchase = current_organization.purchases.find(params[:id])
-      purchase.storage_location.decrease_inventory(purchase)
-      purchase.destroy!
+      @purchase = current_organization.purchases.find(params[:id])
+      @purchase.storage_location.decrease_inventory(@purchase)
+      @purchase.destroy!
     end
-
     flash[:notice] = "Purchase #{params[:id]} has been removed!"
     redirect_to purchases_path
+  rescue Errors::InsufficientAllotment => error
+    @line_items = @purchase.line_items
+    flash[:error] = error.message
+    render "show" 
   end
 
   private

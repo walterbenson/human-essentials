@@ -79,7 +79,7 @@ class DonationsController < ApplicationController
       @donation.replace_increase!(donation_params)
       redirect_to donations_path
     rescue Errors::InsufficientAllotment => error
-      flash[:error] = error.message
+      flash[:error] = error.message 
       render "edit"
     end
   end
