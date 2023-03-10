@@ -75,13 +75,11 @@ class DonationsController < ApplicationController
 
   def update
     @donation = Donation.find(params[:id])
-    begin
-      @donation.replace_increase!(donation_params)
-      redirect_to donations_path
-    rescue Errors::InsufficientAllotment => error
-      flash[:error] =  "Sorry, we weren't able to save the donation because that would reduce available inventory below zero."
-      render "edit"
-    end
+    @donation.replace_increase!(donation_params)
+    redirect_to donations_path
+  rescue Errors::InsufficientAllotment
+    flash[:error] =  "Sorry, we weren't able to save the donation because that would reduce available inventory below zero."
+    render "edit"
   end
 
   def destroy

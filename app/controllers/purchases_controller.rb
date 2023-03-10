@@ -70,7 +70,7 @@ class PurchasesController < ApplicationController
       load_form_collections
       render "edit"
     end
-  rescue Errors::InsufficientAllotment => error
+  rescue Errors::InsufficientAllotment
     flash[:error] =  "Sorry, we weren't able to save the purchase because that would reduce available inventory below zero."
     render "edit"
   end
@@ -83,7 +83,7 @@ class PurchasesController < ApplicationController
     end
     flash[:notice] = "Purchase #{params[:id]} has been removed!"
     redirect_to purchases_path
-  rescue Errors::InsufficientAllotment => error
+  rescue Errors::InsufficientAllotment
     @line_items = @purchase.line_items
     flash[:error] = "Sorry, we weren't able to delete the purchase because that would reduce available inventory below zero."
     render "show" 
