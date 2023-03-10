@@ -71,7 +71,7 @@ class PurchasesController < ApplicationController
       render "edit"
     end
   rescue Errors::InsufficientAllotment => error
-    flash[:error] = error.message
+    flash[:error] =  "Sorry, we weren't able to save the purchase because that would reduce available inventory below zero."
     render "edit"
   end
 
@@ -85,7 +85,7 @@ class PurchasesController < ApplicationController
     redirect_to purchases_path
   rescue Errors::InsufficientAllotment => error
     @line_items = @purchase.line_items
-    flash[:error] = error.message
+    flash[:error] = "Sorry, we weren't able to delete the purchase because that would reduce available inventory below zero."
     render "show" 
   end
 
